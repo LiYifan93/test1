@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拖拽事件</title>
+    <script>
+        function init() {
+            var source = document.getElementById('dragme')
+            var dest = document.getElementById("text")
+                // （1）监听开始拖放事件
+            source.addEventListener('dragstart', function(ev) {
+                    //向dataTransfar对象追加数据
+                    // dataTransfar对象专门用来存放拖放时要携带的数据，可以被设置为拖动事件的dataTransfer属性
+                    var dt = ev.dataTransfer
+                    dt.effectAllowed = "all"
+
+                    // （2）拖动元素
+                    dt.setData("text/plain", "哈喽")
+                }, false)
+                // (3)dragend:拖放结束
+            dest.addEventListener('dragend', function(ev) {
+                    // 阻止默认事件提交
+                    ev.preventDefault()
+                }, false)
+                //(4)drop:被拖放
+            dest.addEventListener("drop", function(ev) {
+                var dt = ev.dataTransfer
+                var text = dt.getData("text/plain")
+                dest.textContent += text
+                    // （5）不执行默认处理（拒绝被拖放）
+                ev.preventDefault()
+                    // 停止事件传播
+                ev.stopPropagation()
+            }, false)
+        }
+        // (6)设置页面属性，不执行默认处理(拒绝呗拖放)
+        document.ondragover = function(e) {
+            e.preventDefault()
+        }
+        document.ondrop = function(e) {
+            e.preventDefault()
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <h1>简单拖放实例</h1>
+    <div id="dragme" draggable="true" style="width:200px;border:1px solid gray">请拖放</div>
+    <div id="text" style="width:200px;height:200px;border:1px solid gray"></div>
+
+</body>
+
+</html>
